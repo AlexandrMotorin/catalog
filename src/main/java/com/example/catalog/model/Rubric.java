@@ -1,7 +1,6 @@
 package com.example.catalog.model;
 
 import lombok.*;
-import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -18,7 +18,7 @@ public class Rubric {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tittle;
+    private String name;
 
     private String description;
 
@@ -36,20 +36,27 @@ public class Rubric {
     private List<Item> itemList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "rubric")
-    @ToString.Exclude
-    private List<RubricProperties> rubricProperties;
+    @ManyToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(name = "rubric_properties")
+    private List<Properties> properties = new ArrayList<>();
+
+    public void setParent(Rubric parent) {
+        this.parent = parent;
+        parent.getChildRubrics().add(this);
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         Rubric rubric = (Rubric) o;
-        return id != null && Objects.equals(id, rubric.id);
+        return Objects.equals(name, rubric.name) && Objects.equals(description, rubric.description);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(name, description);
     }
+
+
 }

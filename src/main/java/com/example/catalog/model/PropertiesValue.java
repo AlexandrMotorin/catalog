@@ -33,7 +33,6 @@ public class PropertiesValue {
 
     public void setValue(Value value) {
         this.value = value;
-
     }
 
 

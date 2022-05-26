@@ -6,17 +6,10 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
-@EqualsAndHashCode(exclude = {
-        "rubricPropsList",
-        "propertiesValues"
-})
-@ToString(exclude = {
-        "rubricPropsList",
-        "propertiesValues"
-})
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -26,15 +19,16 @@ public class Properties {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String tittle;
+    private String name;
 
     private String description;
 
-    @Builder.Default
-    @OneToMany(mappedBy = "property")
-    private List<RubricProperties> rubricPropsList = new ArrayList<>();
+    private String units;
 
     @Builder.Default
-    @OneToMany(mappedBy = "property")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "property", orphanRemoval = true)
     private List<PropertiesValue> propertiesValues = new ArrayList<>();
+
 }
