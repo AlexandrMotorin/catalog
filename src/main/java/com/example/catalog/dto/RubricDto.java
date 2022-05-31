@@ -1,16 +1,13 @@
 package com.example.catalog.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import java.io.Serializable;
-
-@Data
 @Builder
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 @AllArgsConstructor
-public class RubricDto implements Serializable {
+public class RubricDto extends AbstractDto {
     private String name;
-    private String description;
     private Long parentId;
 }

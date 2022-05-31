@@ -11,11 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "items")
-public class Item {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Item extends AbstractEntity{
 
     private String name;
 

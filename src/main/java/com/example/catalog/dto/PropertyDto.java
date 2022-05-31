@@ -1,11 +1,13 @@
 package com.example.catalog.dto;
 
-import lombok.Data;
+import lombok.*;
 
-import java.io.Serializable;
-
+@Builder
 @Data
-public class PropertyDto implements Serializable {
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+public class PropertyDto extends AbstractDto {
     private String name;
     private String description;
     private String units;

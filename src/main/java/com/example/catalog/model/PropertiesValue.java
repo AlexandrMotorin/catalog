@@ -11,29 +11,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class PropertiesValue {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class PropertiesValue extends AbstractEntity{
 
     @ManyToOne
+    @JoinColumn(insertable = false, updatable = false)
     private Properties property;
 
     @ManyToOne
+    @JoinColumn(insertable = false, updatable = false)
     private Value value;
 
     @OneToMany(mappedBy = "propertiesValue")
     private List<ItemPropertiesValue> propertiesValueList = new ArrayList<>();
-
-    public void setProperty(Properties property) {
-        this.property = property;
-        property.getPropertiesValues().add(this);
-    }
-
-    public void setValue(Value value) {
-        this.value = value;
-    }
 
 
 }

@@ -1,6 +1,6 @@
 package com.example.catalog.mapper;
 
-public interface Mapper <F,T>{
-    F mapTo(T t);
-    T mapFrom(F f);
+public interface Mapper<E,D>{
+    D toDto(E e);
+    E toEntity(D d);
 }

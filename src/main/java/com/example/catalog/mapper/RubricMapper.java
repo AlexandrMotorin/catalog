@@ -1,38 +1,52 @@
 package com.example.catalog.mapper;
 
+import com.example.catalog.dao.RubricRepo;
 import com.example.catalog.dto.RubricDto;
 import com.example.catalog.model.Rubric;
-import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
+import javax.annotation.PostConstruct;
+import java.util.Objects;
 
 @Component
-@RequiredArgsConstructor
-public class RubricMapper implements Mapper<RubricDto, Rubric> {
+public class RubricMapper extends AbstractMapper<Rubric, RubricDto>{
 
-    private final PropertyMapper mapper;
+    private final ModelMapper mapper;
+    private final RubricRepo rubricRepo;
 
-    @Override
-    public RubricDto mapTo(Rubric rubric) {
+    @Autowired
+    public RubricMapper(ModelMapper mapper, RubricRepo rubricRepo) {
+        super(Rubric.class, RubricDto.class);
+        this.mapper = mapper;
+        this.rubricRepo = rubricRepo;
+    }
 
-        System.out.println();
-        Optional<Rubric> parent = Optional.of(rubric.getParent());
-
-        return RubricDto.builder()
-                .name(rubric.getName())
-                .description(rubric.getDescription())
-                .parentId(
-                    5L//todo
-                )
-                .build();
+    @PostConstruct
+    private void setupMapper(){
+        mapper.createTypeMap(RubricDto.class, Rubric.class)
+                .addMappings(m -> m.skip(Rubric::setParent)).setPostConverter(toEntityConverter());
+        mapper.createTypeMap(Rubric.class, RubricDto.class)
+                .addMappings(m -> m.skip(RubricDto::setParentId)).setPostConverter(toDtoConverter());
     }
 
     @Override
-    public Rubric mapFrom(RubricDto rubricDto) {
-        return Rubric.builder()
-                .name(rubricDto.getName())
-                .description(rubricDto.getDescription())
-                .build();
+    void mapSpecificField(RubricDto source, Rubric destination) {
+        if(!Objects.isNull(source.getParentId())) {
+            Rubric parent = rubricRepo.getReferenceById(source.getParentId());
+            destination.setParent(parent);
+        }
+    }
+
+    @Override
+    void mapSpecificField(Rubric source, RubricDto destination) {
+        destination.setParentId(getId(source));
+    }
+
+    private Long getId(Rubric source){
+        return Objects.isNull(source) || Objects.isNull(source.getParent())
+                ? null
+                : source.getParent().getId();
     }
 }

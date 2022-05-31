@@ -12,11 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ItemPropertiesValue {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ItemPropertiesValue extends AbstractEntity{
 
     @ManyToOne
     private PropertiesValue propertiesValue;

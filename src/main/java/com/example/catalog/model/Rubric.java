@@ -12,15 +12,9 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Rubric {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Rubric extends AbstractEntity{
 
     private String name;
-
-    private String description;
 
     @ManyToOne
     private Rubric parent;
@@ -50,13 +44,11 @@ public class Rubric {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Rubric rubric = (Rubric) o;
-        return Objects.equals(name, rubric.name) && Objects.equals(description, rubric.description);
+        return Objects.equals(name, rubric.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description);
+        return Objects.hash(name);
     }
-
-
 }

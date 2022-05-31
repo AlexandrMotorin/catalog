@@ -13,11 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "values")
-public class Value {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Value extends AbstractEntity{
 
     private String value;
 
